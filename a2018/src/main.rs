@@ -22,23 +22,47 @@ fn main() {
 
     // Read the file contents into a string, returns `io::Result<usize>`
     let mut s = String::new();
-    match file.read_to_string(&mut s) {
-        Err(why) => panic!("couldn't read {}: {}", display,
-                                                   why.description()),
-        Ok(_) => print!("{} contains:\n{}", display, s),
-    }
+    let _err = file.read_to_string(&mut s);
 
+    let mut array = Vec::new();
     for line in s.split("\n") {
-        if line.len() == 0 {
+        if line == "" {
             break;
         }
         let my_int: i32 = line.parse::<i32>().unwrap();
-        print!("int: {} \n", my_int);
-        total += my_int;
+        array.push(my_int);
     }
 
-    print!("total: {}\n", total);
+    let mut vec: Vec<i32> = Vec::new();
 
-    // `file` goes out of scope, and the "hello.txt" file gets closed
+    let mut is_duplicate = true;
+    let mut index = 0;
+    let mut t = 0;
+    while is_duplicate {
+        let current_int : i32 = array[index];
+
+        total += current_int;
+
+        // Part 2
+        if vec.contains(&total) {
+            println!("first duplicate found {}", total);
+            is_duplicate = false;
+        }
+        vec.push(total);
+
+        index += 1;
+        if index >= array.len() {
+            index = 0;
+            t+=1;
+            println!("size: {}", vec.len());
+            println!("{}", t);
+        }
+    }
+
+    // for item in vec {
+    //     print!("{}, ", item);
+    // }
+
+    println!("total: {}", total);
 }
 
