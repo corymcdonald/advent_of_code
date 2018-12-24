@@ -2,6 +2,7 @@ use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
+use std::collections::HashSet;
 
 
 fn main() {
@@ -33,35 +34,16 @@ fn main() {
         array.push(my_int);
     }
 
-    let mut vec: Vec<i32> = Vec::new();
 
-    let mut is_duplicate = true;
-    let mut index = 0;
-    let mut t = 0;
-    while is_duplicate {
-        let current_int : i32 = array[index];
-
-        total += current_int;
-
-        // Part 2
-        if vec.contains(&total) {
+    let mut past_results = HashSet::new();
+     for number in array.iter().cycle() {
+         total += number;
+         if past_results.contains(&total) {
             println!("first duplicate found {}", total);
-            is_duplicate = false;
+            break;
         }
-        vec.push(total);
-
-        index += 1;
-        if index >= array.len() {
-            index = 0;
-            t+=1;
-            println!("size: {}", vec.len());
-            println!("{}", t);
-        }
-    }
-
-    // for item in vec {
-    //     print!("{}, ", item);
-    // }
+        past_results.insert(total);
+     }
 
     println!("total: {}", total);
 }
